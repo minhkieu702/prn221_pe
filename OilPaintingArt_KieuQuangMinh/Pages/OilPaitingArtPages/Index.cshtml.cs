@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Text.Json.Serialization;
 using Repository.Common;
 using Repository.Models;
 using Services;
 using static NuGet.Packaging.PackagingConstants;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace OilPaintingArt_KieuQuangMinh.Pages.OilPaitingArtPages
 {
@@ -21,39 +25,38 @@ namespace OilPaintingArt_KieuQuangMinh.Pages.OilPaitingArtPages
         {
             _service ??= new();
         }
-        [BindProperty]
-        public string Style { get; set; }
-        [BindProperty]
-        public string Artist { get; set; }
+        public string? StyleSearching { get; set; }
+        public string? ArtistSearching { get; set; }
+        public int CurrentPage { get; set; } = 1;
         public int TotalPages { get; set; }
-        public PaginatedList<OilPaintingArt> OilPaintingArt { get; set; } = default!;
-
-        public async Task<IActionResult> OnGetAsync(int? pageIndex, string searchStyle, string searchArtist, string style, string artist)
+        public List<OilPaintingArt> ListOPA { get; set; }
+        private readonly int pageSize = 2;
+        public IActionResult OnGet(int newCurPage = 1, string style = @"", string artist = @"")
         {
-            if (HttpContext.Session.GetInt32("r") != 2 && HttpContext.Session.GetInt32("r") != 3)
+            if (!(HttpContext.Session.GetInt32("r") == 2 || HttpContext.Session.GetInt32("r") == 3))
             {
+                TempData["message"] = "You don't have enough permission. Please try another email.";
                 return RedirectToPage("../Index");
             }
-            if (!searchStyle.IsNullOrEmpty() || !searchArtist.IsNullOrEmpty()) pageIndex = 1;
-            else
+            try
             {
-                searchStyle = style;
-                searchArtist = artist;
-            }
-            Artist = searchArtist;
-            Style = searchStyle;
+                CurrentPage = newCurPage;
+                StyleSearching = style;
+                ArtistSearching = artist;
 
-            var result = _service.GetAll();
-            if (!searchStyle.IsNullOrEmpty() || !searchArtist.IsNullOrEmpty()) result = _service.GetBySearching(Style, Artist);
-
-            if (result.Count > 0)
-            {
-                int pageSize = 2;
-                TotalPages = (int)Math.Ceiling(result.Count / (double)pageSize);
-                OilPaintingArt = await PaginatedList<OilPaintingArt>.CreateAsync(result, pageIndex ?? 1, pageSize);
+                var list = _service.GetBySearching(StyleSearching, ArtistSearching);
+                
+                TotalPages = (int)Math.Ceiling(list.Count / (double)pageSize);
+                ListOPA = list.Skip(
+                (CurrentPage - 1) * pageSize)
+                .Take(pageSize).ToList();
                 return Page();
             }
-            return NotFound();
+            catch (Exception ez)
+            {
+                TempData["message"] = ez.Message;
+                return Page();
+            }
         }
     }
 }

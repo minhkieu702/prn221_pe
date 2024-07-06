@@ -15,25 +15,15 @@
 <p>
     <a asp-page="Create">Create New</a>
 </p>
-<form asp-asp-page="./Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Find by artist:
-            <input type="text"
-                   name="searchArtist"
-                   value="@Model.Artist" />
-            Find by style:
-            <input type="text"
-                   name="searchStyle"
-                   value="@Model.Style" />
-            <input type="submit"
-                   value="Search"
-                   class="btn btn-primary" />
-            <a asp-page="./Index">Back to full List</a>
-        </p>
+<form method="get">
+    <div class="form-group">
+        Searching by artist <input name="artist" value="@Model.ArtistSearching" />
+        Searching by style <input name="style" value="@Model.StyleSearching" />
+        <input name="newCurPage" value=1 hidden/>
+        <input type="submit" value="Search" class="btn btn-primary" />
     </div>
 </form>
-@if (Model.OilPaintingArt.Count == 0 || Model.OilPaintingArt == null)
+@if (Model.ListOPA.Count == 0 || Model.ListOPA == null)
 {
     <p>Please enter different searching string one more time!</p>
 }else
@@ -42,37 +32,37 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.OilPaintingArt[0].ArtTitle)
+                    @Html.DisplayNameFor(model => model.ListOPA[0].ArtTitle)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.OilPaintingArt[0].OilPaintingArtLocation)
+                    @Html.DisplayNameFor(model => model.ListOPA[0].OilPaintingArtLocation)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.OilPaintingArt[0].OilPaintingArtStyle)
+                    @Html.DisplayNameFor(model => model.ListOPA[0].OilPaintingArtStyle)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.OilPaintingArt[0].Artist)
+                    @Html.DisplayNameFor(model => model.ListOPA[0].Artist)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.OilPaintingArt[0].NotablFeatures)
+                    @Html.DisplayNameFor(model => model.ListOPA[0].NotablFeatures)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.OilPaintingArt[0].PriceOfOilPaintingArt)
+                    @Html.DisplayNameFor(model => model.ListOPA[0].PriceOfOilPaintingArt)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.OilPaintingArt[0].StoreQuantity)
+                    @Html.DisplayNameFor(model => model.ListOPA[0].StoreQuantity)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.OilPaintingArt[0].CreatedDate)
+                    @Html.DisplayNameFor(model => model.ListOPA[0].CreatedDate)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.OilPaintingArt[0].Supplier.CompanyName)
+                    @Html.DisplayNameFor(model => model.ListOPA[0].Supplier.CompanyName)
                 </th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.OilPaintingArt)
+            @foreach (var item in Model.ListOPA)
             {
                 <tr>
                     <td>
@@ -111,35 +101,21 @@
             }
         </tbody>
     </table>
+}
+<div class="d-flex justify-content-between">
+    <form method="get" class="form-inline">
+        <input type="hidden" name="newCurPage" value="@(Model.CurrentPage - 1)" />
+        <input type="hidden" name="style" value="@Model.StyleSearching" />
+        <input type="hidden" name="artist" value="@Model.ArtistSearching" />
+        <button type="submit" class="btn btn-primary" @(Model.CurrentPage <= 1 ? "disabled" : "")>Previous</button>
+    </form>
 
-}
-<div id="pagination" class="pagination"></div>
-@{
-    var prevDisabled = !Model.OilPaintingArt.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.OilPaintingArt.HasNextPage ? "disabled" : "";
-}
+    <span>Page @Model.CurrentPage of @Model.TotalPages</span>
 
-<a asp-page="./Index"
-   asp-route-pageIndex="@(Model.OilPaintingArt.PageIndex - 1)"
-   asp-route-style="@Model.Style"
-   asp-route-artist="@Model.Artist"
-   class="btn btn-primary @prevDisabled">
-    Previous
-</a>
-@for (int i = 1; i <= Model.TotalPages; i++)
-{
-    <a asp-page="./Index"
-       asp-route-pageIndex="@i" 
-       asp-route-style="@Model.Style"
-       asp-route-artist="@Model.Artist"
-       class="btn btn-primary">
-        @i
-    </a>
-}
-<a asp-page="./Index"
-   asp-route-pageIndex="@(Model.OilPaintingArt.PageIndex + 1)"
-   asp-route-style="@Model.Style"
-   asp-route-artist="@Model.Artist" 
-   class="btn btn-primary @nextDisabled">
-    Next
-</a>
+    <form method="get" class="form-inline">
+        <input type="hidden" name="newCurPage" value="@(Model.CurrentPage + 1)" />
+        <input type="hidden" name="style" value="@Model.StyleSearching" />
+        <input type="hidden" name="artist" value="@Model.ArtistSearching" />
+        <button type="submit" class="btn btn-primary" @(Model.CurrentPage >= Model.TotalPages ? "disabled" : "")>Next</button>
+    </form>
+</div>

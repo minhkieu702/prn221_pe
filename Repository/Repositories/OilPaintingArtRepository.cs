@@ -23,7 +23,7 @@ namespace Repository.Repositories
             oPAs = oPAs.OrderByDescending(oPA => oPA.CreatedDate).ToList();
             return oPAs;
         }
-        public List<OilPaintingArt> GetBySearching(string opaStyle, string artist)
+        public List<OilPaintingArt> GetBySearching(string? opaStyle, string? artist)
         {
             opaStyle = opaStyle.IsNullOrEmpty() ? string.Empty : opaStyle;
             artist = artist.IsNullOrEmpty() ? string.Empty : artist;
