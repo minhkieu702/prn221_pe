@@ -35,7 +35,7 @@ namespace Repository.Repositories
             _context = new();
             return _context.OilPaintingArts.FirstOrDefault(p => p.OilPaintingArtId == id);
         }
-        public void Create(OilPaintingArt opa)
+        public int Create(OilPaintingArt opa)
         {
             try
             {
@@ -44,7 +44,7 @@ namespace Repository.Repositories
                 {
                     _context = new();
                     _context.Add(opa);
-                    _context.SaveChanges();
+                    return _context.SaveChanges();
                 }
                 else
                 {
@@ -57,7 +57,7 @@ namespace Repository.Repositories
                 throw;
             }
         }
-        public void Delete(int id)
+        public int Delete(int id)
         {
             try
             {
@@ -66,7 +66,7 @@ namespace Repository.Repositories
                 {
                     _context = new();
                     _context.OilPaintingArts.Remove(b);
-                    _context.SaveChanges();
+                    return _context.SaveChanges();
                 }
                 else
                 {
@@ -79,7 +79,7 @@ namespace Repository.Repositories
                 throw;
             }
         }
-        public void Update(OilPaintingArt OilPaintingArt)
+        public int Update(OilPaintingArt OilPaintingArt)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace Repository.Repositories
                 {
                     _context = new();
                     _context.OilPaintingArts.Update(OilPaintingArt);
-                    _context.SaveChanges();
+                    return _context.SaveChanges();
                 }
                 else
                 {

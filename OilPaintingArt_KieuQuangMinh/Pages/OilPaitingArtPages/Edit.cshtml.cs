@@ -26,6 +26,10 @@ namespace OilPaintingArt_KieuQuangMinh.Pages.OilPaitingArtPages
         public List<SupplierCompany> SupplierCompany { get; set; }
         public async Task<IActionResult> OnGetAsync(int? id)
         {
+            if (HttpContext.Session.GetInt32("r") == 2)
+            {
+                return RedirectToPage("./Index");
+            }
             if (HttpContext.Session.GetInt32("r") != 3)
             {
                 return RedirectToPage("../Index");
@@ -52,15 +56,22 @@ namespace OilPaintingArt_KieuQuangMinh.Pages.OilPaitingArtPages
         {
             if (!ModelState.IsValid)
             {
+                SupplierCompany = _sCService.GetAll();
                 return Page();
             }
 
             try
             {
-                _ilPaintingArtService.Update(OilPaintingArt);
+                int check = _ilPaintingArtService.Update(OilPaintingArt);
+                if (check == 0)
+                {
+                    SupplierCompany = _sCService.GetAll();
+                    return Page();
+                }
             }
             catch (DbUpdateConcurrencyException)
             {
+                SupplierCompany = _sCService.GetAll();
                 return Page();
             }
 

@@ -24,6 +24,10 @@ namespace OilPaintingArt_KieuQuangMinh.Pages.OilPaitingArtPages
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
+            if (HttpContext.Session.GetInt32("r") == 2)
+            {
+                return RedirectToPage("./Index");
+            }
             if (HttpContext.Session.GetInt32("r") != 3)
             {
                 return RedirectToPage("../Index");
@@ -50,11 +54,11 @@ namespace OilPaintingArt_KieuQuangMinh.Pages.OilPaitingArtPages
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToPage("./Index");
             }
 
-            _service.Delete(id.Value);
-
+            int check = _service.Delete(id.Value);
+            if (check == 0) return RedirectToAction($"OnGetAsync({id})");
             return RedirectToPage("./Index");
         }
     }

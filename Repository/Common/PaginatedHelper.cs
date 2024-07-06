@@ -1,4 +1,4 @@
-﻿namespace OilPaintingArt_KieuQuangMinh.Common
+﻿namespace Repository.Common
 {
     public class PaginatedList<T> : List<T>
     {

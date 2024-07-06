@@ -21,16 +21,27 @@ namespace OilPaintingArt_KieuQuangMinh.Pages.OilPaitingArtPages
         }
         public IActionResult OnGet()
         {
+
+            if (HttpContext.Session.GetInt32("r") == 2)
+            {
+                return RedirectToPage("./Index");
+            }
             if (HttpContext.Session.GetInt32("r") != 3 )
             {
                 return RedirectToPage("../Index");
             }
+            if (OilPaintingArt == null)
+            {
+                OilPaintingArt = new OilPaintingArt();
+            }
+            OilPaintingArt.CreatedDate = DateTime.Now;
             SupplierCompany = _sCService.GetAll();
             return Page();
         }
 
         [BindProperty]
-        public OilPaintingArt OilPaintingArt { get; set; } = default!;
+        public OilPaintingArt OilPaintingArt { get; set; }
+        public DateTime CurrentDate { get; set; }
         public List<SupplierCompany> SupplierCompany { get; set; }
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
@@ -38,11 +49,15 @@ namespace OilPaintingArt_KieuQuangMinh.Pages.OilPaitingArtPages
         {
             if (!ModelState.IsValid)
             {
+                OnGet();
                 return Page();
             }
-_ilPaintingArtService
-            .Create(OilPaintingArt);
-
+            int check = _ilPaintingArtService.Create(OilPaintingArt);
+            if (check == 0)
+            {
+                OnGet();
+                return Page();
+            }
             return RedirectToPage("./Index");
         }
     }

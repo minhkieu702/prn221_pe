@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using OilPaintingArt_KieuQuangMinh.Common;
+using Repository.Common;
 using Repository.Models;
 using Services;
 using static NuGet.Packaging.PackagingConstants;
