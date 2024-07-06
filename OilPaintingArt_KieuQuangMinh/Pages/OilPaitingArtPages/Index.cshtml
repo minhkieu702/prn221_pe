@@ -6,10 +6,10 @@
 }
 
 <h1>Index</h1>
-@if (ViewData["message"] != null)
+@if (TempData["message"] != null)
 {
     <div class="alert alert-danger">
-        @ViewData["message"]
+        @TempData["message"]
     </div>
 }
 <p>

@@ -8,10 +8,10 @@
     <div class="row">
         <div class="col-md-4">
     <h1>Login</h1>
-            @if (ViewData["message"] != null)
+            @if (TempData["message"] != null)
             {
                 <div class="alert alert-danger">
-                    @ViewData["message"]
+                    @TempData["message"]
                 </div>
             }
     <form method="post">
@@ -27,7 +27,7 @@
             <span asp-validation-for=@Model.SystemAccount.AccountPassword class="text-danger"></span>
         </div>
         <div class="form-group">
-            <input type="submit" value="Create" class="btn btn-primary" />
+            <input type="submit" value="Login" class="btn btn-primary" />
         </div>
     </form>
     </div>

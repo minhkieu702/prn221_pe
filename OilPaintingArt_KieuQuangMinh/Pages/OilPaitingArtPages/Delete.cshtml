@@ -8,10 +8,10 @@
 <h1>Delete</h1>
 
 <h3>Are you sure you want to delete this?</h3>
-@if (ViewData["message"] != null)
+@if (TempData["message"] != null)
 {
     <div class="alert alert-danger">
-        @ViewData["message"]
+        @TempData["message"]
     </div>
 }
 <div>

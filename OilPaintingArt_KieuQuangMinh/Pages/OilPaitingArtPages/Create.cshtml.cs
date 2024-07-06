@@ -24,12 +24,12 @@ namespace OilPaintingArt_KieuQuangMinh.Pages.OilPaitingArtPages
 
             if (HttpContext.Session.GetInt32("r") == 2)
             {
-                ViewData["message"] = "You don't have enough permission. Please try another email.";
+                TempData["message"] = "You don't have enough permission. Please try another email.";
                 return RedirectToPage("./Index");
             }
             if (HttpContext.Session.GetInt32("r") != 3 )
             {
-                ViewData["message"] = "You don't have enough permission. Please try another email.";
+                TempData["message"] = "You don't have enough permission. Please try another email.";
                 return RedirectToPage("../Index");
             }
             if (OilPaintingArt == null)
@@ -66,7 +66,7 @@ namespace OilPaintingArt_KieuQuangMinh.Pages.OilPaitingArtPages
             }
             catch (Exception ex)
             {
-                ViewData["message"] = ex.Message.ToString(); 
+                TempData["message"] = ex.Message.ToString(); 
                 OnGet();
                 return Page();
             }

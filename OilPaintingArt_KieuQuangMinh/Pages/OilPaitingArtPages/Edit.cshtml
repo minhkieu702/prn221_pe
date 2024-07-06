@@ -8,10 +8,10 @@
 <h1>Edit</h1>
 
 <h4>OilPaintingArt</h4>
-@if (ViewData["message"] != null)
+@if (TempData["message"] != null)
 {
     <div class="alert alert-danger">
-        @ViewData["message"]
+        @TempData["message"]
     </div>
 }
 <hr />

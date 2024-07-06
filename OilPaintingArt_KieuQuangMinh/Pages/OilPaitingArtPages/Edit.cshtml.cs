@@ -28,12 +28,12 @@ namespace OilPaintingArt_KieuQuangMinh.Pages.OilPaitingArtPages
         {
             if (HttpContext.Session.GetInt32("r") == 2)
             {
-                ViewData["message"] = "You don't have enough permission. Please try another email.";
+                TempData["message"] = "You don't have enough permission. Please try another email.";
                 return RedirectToPage("./Index");
             }
             if (HttpContext.Session.GetInt32("r") != 3)
             {
-                ViewData["message"] = "You don't have enough permission. Please try another email.";
+                TempData["message"] = "You don't have enough permission. Please try another email.";
                 return RedirectToPage("../Index");
             }
             if (id == null)
@@ -78,7 +78,7 @@ namespace OilPaintingArt_KieuQuangMinh.Pages.OilPaitingArtPages
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
-                    ViewData["message"] = ex.Message;
+                    TempData["message"] = ex.Message;
                     OnGetAsync(OilPaintingArt.OilPaintingArtId);
                     return Page();
                 }
@@ -87,7 +87,7 @@ namespace OilPaintingArt_KieuQuangMinh.Pages.OilPaitingArtPages
             }
             catch (Exception ex)
             {
-                ViewData["message"] = ex.Message;
+                TempData["message"] = ex.Message;
                 OnGetAsync(OilPaintingArt.OilPaintingArtId);
                 return Page();
             }
