@@ -26,10 +26,12 @@ namespace OilPaintingArt_KieuQuangMinh.Pages.OilPaitingArtPages
         {
             if (HttpContext.Session.GetInt32("r") == 2)
             {
+                ViewData["message"] = "You don't have enough permission. Please try another email.";
                 return RedirectToPage("./Index");
             }
             if (HttpContext.Session.GetInt32("r") != 3)
             {
+                ViewData["message"] = "You don't have enough permission. Please try another email.";
                 return RedirectToPage("../Index");
             }
             if (id == null)
@@ -52,14 +54,23 @@ namespace OilPaintingArt_KieuQuangMinh.Pages.OilPaitingArtPages
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (id == null)
+            try
             {
+                if (id == null)
+                {
+                    return RedirectToPage("./Index");
+                }
+
+                int check = _service.Delete(id.Value);
+                if (check == 0) await OnGetAsync(id);
                 return RedirectToPage("./Index");
             }
-
-            int check = _service.Delete(id.Value);
-            if (check == 0) return RedirectToAction($"OnGetAsync({id})");
-            return RedirectToPage("./Index");
+            catch (Exception ex)
+            {
+                ViewData["Message"] = ex.Message;
+                await OnGetAsync(id);
+                return null;
+            }
         }
     }
 }

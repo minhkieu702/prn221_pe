@@ -24,10 +24,12 @@ namespace OilPaintingArt_KieuQuangMinh.Pages.OilPaitingArtPages
 
             if (HttpContext.Session.GetInt32("r") == 2)
             {
+                ViewData["message"] = "You don't have enough permission. Please try another email.";
                 return RedirectToPage("./Index");
             }
             if (HttpContext.Session.GetInt32("r") != 3 )
             {
+                ViewData["message"] = "You don't have enough permission. Please try another email.";
                 return RedirectToPage("../Index");
             }
             if (OilPaintingArt == null)
@@ -47,18 +49,27 @@ namespace OilPaintingArt_KieuQuangMinh.Pages.OilPaitingArtPages
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+            try
             {
+                if (!ModelState.IsValid)
+                {
+                    OnGet();
+                    return Page();
+                }
+                int check = _ilPaintingArtService.Create(OilPaintingArt);
+                if (check == 0)
+                {
+                    OnGet();
+                    return Page();
+                }
+                return RedirectToPage("./Index");
+            }
+            catch (Exception ex)
+            {
+                ViewData["message"] = ex.Message.ToString(); 
                 OnGet();
                 return Page();
             }
-            int check = _ilPaintingArtService.Create(OilPaintingArt);
-            if (check == 0)
-            {
-                OnGet();
-                return Page();
-            }
-            return RedirectToPage("./Index");
         }
     }
 }

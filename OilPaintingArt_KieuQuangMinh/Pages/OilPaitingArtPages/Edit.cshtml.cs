@@ -22,16 +22,18 @@ namespace OilPaintingArt_KieuQuangMinh.Pages.OilPaitingArtPages
         }
 
         [BindProperty]
-        public OilPaintingArt OilPaintingArt { get; set; } = default!;
+        public OilPaintingArt OilPaintingArt { get; set; }
         public List<SupplierCompany> SupplierCompany { get; set; }
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (HttpContext.Session.GetInt32("r") == 2)
             {
+                ViewData["message"] = "You don't have enough permission. Please try another email.";
                 return RedirectToPage("./Index");
             }
             if (HttpContext.Session.GetInt32("r") != 3)
             {
+                ViewData["message"] = "You don't have enough permission. Please try another email.";
                 return RedirectToPage("../Index");
             }
             if (id == null)
@@ -45,7 +47,10 @@ namespace OilPaintingArt_KieuQuangMinh.Pages.OilPaitingArtPages
             {
                 return NotFound();
             }
-            OilPaintingArt = oilpaintingart;
+            if (OilPaintingArt == null)
+            {
+                OilPaintingArt = oilpaintingart;
+            }
             SupplierCompany = _sCService.GetAll();
             return Page();
         }
@@ -54,28 +59,38 @@ namespace OilPaintingArt_KieuQuangMinh.Pages.OilPaitingArtPages
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                SupplierCompany = _sCService.GetAll();
-                return Page();
-            }
-
             try
             {
-                int check = _ilPaintingArtService.Update(OilPaintingArt);
-                if (check == 0)
+                if (!ModelState.IsValid)
                 {
-                    SupplierCompany = _sCService.GetAll();
+                    OnGetAsync(OilPaintingArt.OilPaintingArtId);
                     return Page();
                 }
+
+                try
+                {
+                    int check = _ilPaintingArtService.Update(OilPaintingArt);
+                    if (check == 0)
+                    {
+                        OnGetAsync(OilPaintingArt.OilPaintingArtId);
+                        return Page();
+                    }
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    ViewData["message"] = ex.Message;
+                    OnGetAsync(OilPaintingArt.OilPaintingArtId);
+                    return Page();
+                }
+
+                return RedirectToPage("./Index");
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                SupplierCompany = _sCService.GetAll();
+                ViewData["message"] = ex.Message;
+                OnGetAsync(OilPaintingArt.OilPaintingArtId);
                 return Page();
             }
-
-            return RedirectToPage("./Index");
         }
     }
 }

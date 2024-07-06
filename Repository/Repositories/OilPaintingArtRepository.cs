@@ -51,10 +51,9 @@ namespace Repository.Repositories
                     throw new Exception("This OilPaintingArt is already exist.");
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                throw new Exception(ex.Message);
             }
         }
         public int Delete(int id)
@@ -73,10 +72,9 @@ namespace Repository.Repositories
                     throw new Exception("This OilPaintingArt does not already exist.");
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                throw new Exception(ex.Message);
             }
         }
         public int Update(OilPaintingArt OilPaintingArt)
@@ -95,10 +93,9 @@ namespace Repository.Repositories
                     throw new Exception("This OilPaintingArt does not already exist.");
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                throw new Exception(ex.Message);
             }
         }
     }

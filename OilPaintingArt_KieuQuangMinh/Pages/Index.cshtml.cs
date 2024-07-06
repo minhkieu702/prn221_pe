@@ -26,6 +26,12 @@ namespace OilPaintingArt_KieuQuangMinh.Pages
             var account = _service.Login(SystemAccount.AccountEmail, SystemAccount.AccountPassword);
             if (account == null)
             {
+                ViewData["message"] = "Login failed. Try again!!!";
+                return Page();
+            }
+            if (!(account.Role == 2 || account.Role == 3))
+            {
+                ViewData["message"] = "You don't have enough permission. Please try another email.";
                 return Page();
             }
             HttpContext.Session.SetInt32("r", account.Role.Value);
