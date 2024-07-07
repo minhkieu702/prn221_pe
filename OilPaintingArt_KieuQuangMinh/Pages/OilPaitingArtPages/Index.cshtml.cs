@@ -1,20 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Text.Json.Serialization;
-using Repository.Common;
 using Repository.Models;
 using Services;
-using static NuGet.Packaging.PackagingConstants;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace OilPaintingArt_KieuQuangMinh.Pages.OilPaitingArtPages
 {

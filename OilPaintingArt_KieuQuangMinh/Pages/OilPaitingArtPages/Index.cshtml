@@ -23,7 +23,7 @@
         <input type="submit" value="Search" class="btn btn-primary" />
     </div>
 </form>
-@if (Model.ListOPA.Count == 0 || Model.ListOPA == null)
+@if (Model.ListOPA == null || Model.ListOPA.Count == 0)
 {
     <p>Please enter different searching string one more time!</p>
 }else
